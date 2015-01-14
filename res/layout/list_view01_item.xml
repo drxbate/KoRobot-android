@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+	<LinearLayout 
+	    android:id="@+id/lv01:header"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    <TextView
+        android:id="@+id/lv01:address"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="text1" />
+
+    <TextView
+        android:id="@+id/lv01:name"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="text2" />
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/lv01:ctrl"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:visibility="visible" >
+
+	    <Button
+	        android:id="@+id/lv01:car"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="车辆" />
+	</LinearLayout>
+
+</LinearLayout>
