@@ -22,7 +22,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 	SensorManager sensorMgr=null;
 	Sensor sensor=null;
 	String address=null;
-	int speed=4;
+	int speed=3;
 	TextView tvXR,tvYR,tvZR;
 	int state=0;
 	final int STATE_FORWARD=0;
@@ -34,7 +34,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			speed+=(speed==8?0:1);
+			speed+=(speed==0?0:-1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
 		}
@@ -46,7 +46,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			speed+=(speed==4?0:-1);
+			speed+=(speed==3?0:1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
 		}
