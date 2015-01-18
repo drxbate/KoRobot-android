@@ -22,7 +22,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 	SensorManager sensorMgr=null;
 	Sensor sensor=null;
 	String address=null;
-	int speed=3;
+	int speed=5;
 	TextView tvXR,tvYR,tvZR;
 	int state=0;
 	final int STATE_FORWARD=0;
@@ -34,7 +34,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			speed+=(speed==0?0:-1);
+			speed+=(speed==9?0:1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
 		}
@@ -46,7 +46,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			speed+=(speed==3?0:1);
+			speed+=(speed==1?0:-1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
 		}
@@ -60,7 +60,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 			// TODO Auto-generated method stub
 
 			state=STATE_FORWARD;
-			CarFragment.this.sendCommand("i");
+			CarFragment.this.sendCommand("i"+speed);
 		}
 		
 	};
@@ -71,7 +71,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 			// TODO Auto-generated method stub
 			
 			state=STATE_STOP;
-			CarFragment.this.sendCommand("9");
+			CarFragment.this.sendCommand("0");
 		
 		}
 		
@@ -83,7 +83,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			state=STATE_BACKWARD;
-			CarFragment.this.sendCommand("k");
+			CarFragment.this.sendCommand("k"+speed);
 		}
 		
 	};
@@ -191,4 +191,14 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		
 	}
 
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		
+		sensorMgr.unregisterListener(this);
+		
+		super.onDestroy();
+	}
+
+	
 }

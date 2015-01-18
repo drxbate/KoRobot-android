@@ -29,6 +29,8 @@ public class MainActivity extends FragmentActivity {
 	FragmentManager fm=null;
 	Queue<Integer> currentAction=new LinkedList<Integer>();
 	
+	private BroadcastReceiver receiver;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +41,7 @@ public class MainActivity extends FragmentActivity {
 		
 		doAction(ACTION_DEVICE_PICK,null);	
 		
-		BroadcastReceiver receiver=new BroadcastReceiver(){
+		receiver=new BroadcastReceiver(){
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -82,6 +84,13 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		currentAction.add(action);
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		this.unregisterReceiver(receiver);
+		super.onDestroy();
 	}
 
 

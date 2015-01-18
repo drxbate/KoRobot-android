@@ -49,6 +49,8 @@ public class BTService extends Service {
 	
 	private BTBinder binder=new BTBinder();
 	
+	private BroadcastReceiver br=null;
+	
 	public class BTBinder extends Binder{
 		public BTService getService(){
 			return BTService.this;
@@ -141,6 +143,15 @@ public class BTService extends Service {
 		return binder;
 	}
 	
+	
+	
+	@Override
+	public boolean onUnbind(Intent intent) {
+		// TODO Auto-generated method stub
+		this.unregisterReceiver(br);
+		return super.onUnbind(intent);
+	}
+
 	private void initDevice(){
 		localDevice=LocalDevice.getInstance();
 		localDevice.init(this, new ReadyListener(){
@@ -157,7 +168,7 @@ public class BTService extends Service {
 			 
 		});		
 		
-		BroadcastReceiver br=new BroadcastReceiver(){
+		br=new BroadcastReceiver(){
 
 			@Override
 			public void onReceive(Context arg0, Intent arg1) {

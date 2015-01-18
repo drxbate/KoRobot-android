@@ -14,6 +14,7 @@ import com.smartOne.korobot.R;
 
 
 
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -129,12 +130,12 @@ public class DeviceListFragment extends Fragment {
 		lvDevices.setAdapter(adapter);
 		
 		BTService.getInstance(this.getActivity(), new ServiceGotListener(){
-			
+			BroadcastReceiver bcr;
 			@Override
 			public void gotOneInstanceService(final BTService service) {
 				updateAdapter(service);
 				
-				BroadcastReceiver bcr=new BroadcastReceiver(){
+				bcr=new BroadcastReceiver(){
 
 					@Override
 					public void onReceive(Context arg0, Intent arg1) {
@@ -150,6 +151,13 @@ public class DeviceListFragment extends Fragment {
 				filter.addAction(BTService.ScanCompleteBroadcast);
 				DeviceListFragment.this.getActivity().registerReceiver(bcr, filter);
 				
+			}
+
+			@Override
+			protected void finalize() throws Throwable {
+				// TODO Auto-generated method stub
+				//DeviceListFragment.this.getActivity().unregisterReceiver(bcr);
+				super.finalize();
 			}
 			
 			
