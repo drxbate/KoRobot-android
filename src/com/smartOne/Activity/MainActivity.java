@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.Fragment.SavedState;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -73,10 +74,12 @@ public class MainActivity extends FragmentActivity {
 			f = new DeviceListFragment();
 		}
 		else if(action==ACTION_CAR_CONTROL){
-			f = new CarFragment(args);
+			f = new CarFragment();
+			f.setArguments(args);
 		}
 		
 		if(currentAction.size()==0){
+			
 			fm.beginTransaction().add(R.id.llCenter,f, "").commit();
 		}
 		else{

@@ -23,12 +23,13 @@ public class CarFragment extends Fragment implements SensorEventListener {
 	Sensor sensor=null;
 	String address=null;
 	int speed=5;
-	TextView tvXR,tvYR,tvZR;
+	TextView tvXR,tvYR,tvZR,tvSpeed;
 	int state=0;
 	final int STATE_FORWARD=0;
 	final int STATE_BACKWARD=1;
 	final int STATE_STOP=2;
-	
+	final int STATE_ROTATE_LEFT=3;
+	final int STATE_ROTATE_RIGHT=4;
 	View.OnClickListener upclick=new View.OnClickListener(){
 
 		@Override
@@ -37,6 +38,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 			speed+=(speed==9?0:1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
+			tvSpeed.setText("Current Speed:"+speed);
 		}
 		
 	};
@@ -49,6 +51,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 			speed+=(speed==1?0:-1);
 			String cmd = ""+speed;
 			CarFragment.this.sendCommand(cmd);
+			tvSpeed.setText("Current Speed:"+speed);
 		}
 		
 	};
@@ -60,7 +63,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 			// TODO Auto-generated method stub
 
 			state=STATE_FORWARD;
-			CarFragment.this.sendCommand("i"+speed);
+			CarFragment.this.sendCommand("i");
 		}
 		
 	};
@@ -83,14 +86,36 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			state=STATE_BACKWARD;
-			CarFragment.this.sendCommand("k"+speed);
+			CarFragment.this.sendCommand("k");
 		}
 		
 	};
 	
-	public CarFragment(Bundle args){
+	View.OnClickListener rotateLeftclick=new View.OnClickListener(){
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			state=STATE_ROTATE_LEFT;
+			CarFragment.this.sendCommand("iu");
+		}
 		
-		address = args.getString("address");
+	};
+	
+	View.OnClickListener rotateRightclick=new View.OnClickListener(){
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			state=STATE_ROTATE_RIGHT;
+			CarFragment.this.sendCommand("io");
+		}
+		
+	};
+	
+	public CarFragment(){
+		
+		
 	}
 	
 	private void sendCommand(String cmd){
@@ -105,6 +130,8 @@ public class CarFragment extends Fragment implements SensorEventListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		Bundle args=savedInstanceState==null?this.getArguments():savedInstanceState;
+		address = args.getString("address");
 		View vw=inflater.inflate(R.layout.ll_car, container,false);
 		
 		Button btnUp=(Button) vw.findViewById(R.id.btn_up);
@@ -121,6 +148,14 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		
 		Button btnGoAhead=(Button) vw.findViewById(R.id.btn_go_ahead);
 		btnGoAhead.setOnClickListener(this.goaheadclick);
+		
+		Button btnRotateLeft=(Button) vw.findViewById(R.id.btn_RotateLeft);
+		btnRotateLeft.setOnClickListener(this.rotateLeftclick);
+		
+		Button btnRotateRight=(Button) vw.findViewById(R.id.btn_RotateRight);
+		btnRotateRight.setOnClickListener(this.rotateRightclick);
+		
+		tvSpeed=(TextView) vw.findViewById(R.id.tv_speed);
 		
 		tvXR = (TextView) vw.findViewById(R.id.tv_x_result);
 		tvYR = (TextView) vw.findViewById(R.id.tv_y_result);
@@ -150,7 +185,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		 * y>0 and y<10 left up right down
 		 * z
 		 * */
-		if(state!=STATE_FORWARD){
+		if(state!=STATE_FORWARD&&state!=STATE_BACKWARD){
 			//if speed==9 then keep-stop
 			return;
 		}
@@ -173,7 +208,7 @@ public class CarFragment extends Fragment implements SensorEventListener {
 				this.sendCommand("l");
 			}
 			else{
-				this.sendCommand("i");
+				this.sendCommand(state==STATE_FORWARD?"i":"k");
 			}
 //		}
 //		else{
@@ -198,6 +233,13 @@ public class CarFragment extends Fragment implements SensorEventListener {
 		sensorMgr.unregisterListener(this);
 		
 		super.onDestroy();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		outState = this.getArguments();
+		super.onSaveInstanceState(outState);
 	}
 
 	

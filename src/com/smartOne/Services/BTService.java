@@ -40,7 +40,9 @@ public class BTService extends Service {
 	public static final String SendOutErrorBroadcast="com.Kobot.Services.BTService.SendOutErrorBroadcast";
 	public static final String RecvInBroadcast="com.Kobot.Services.BTService.RecvInBroadcast";
 	
+	private static Context context=null;
 	private static BTService service=null;
+	private static BtServiceConnection conn=null;
 	
 	private Map<String,RemoteDevice> devices=new HashMap<String,RemoteDevice>();
 	private Map<String,BtSocket> sockets=new HashMap<String,BtSocket>();
@@ -50,6 +52,7 @@ public class BTService extends Service {
 	private BTBinder binder=new BTBinder();
 	
 	private BroadcastReceiver br=null;
+	
 	
 	public class BTBinder extends Binder{
 		public BTService getService(){
@@ -85,7 +88,8 @@ public class BTService extends Service {
 	}
 	
 	public static void bindService(Context context,final ServiceGotListener listener){
-		BtServiceConnection conn = new BtServiceConnection(listener);
+		BTService.context=context;
+		conn = new BtServiceConnection(listener);
 		Intent intent = new Intent(context,BTService.class);
         if(!context.bindService(intent, conn, Context.BIND_AUTO_CREATE)){
         	Log.w("BTService","not bind service");
@@ -94,6 +98,11 @@ public class BTService extends Service {
         	Log.w("BTService","bind service success");
         }
 	}
+	
+	public static void unbindService(){
+		BTService.context.unbindService(conn);
+	}
+	
 	
 	public static void getInstance(Context context,ServiceGotListener listener){
 		if(service!=null){
@@ -104,6 +113,7 @@ public class BTService extends Service {
 		}
 	}
 	
+
 	public Map<String,RemoteDevice> getDevices(){
 		return this.devices;
 	}
